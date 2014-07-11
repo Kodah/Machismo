@@ -76,18 +76,5 @@
         self.score -= COST_TO_CHOSE;
         card.chosen = YES;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }
 @end
