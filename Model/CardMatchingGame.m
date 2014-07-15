@@ -55,26 +55,28 @@
     
     Card *card = [self cardAtIndex:index];
     
-    if (card.isChosen) {
-        card.chosen = NO;
-    } else {
-        
-        for (Card *otherCard in self.cards){
-            if (otherCard.isChosen && !otherCard.isMatched){
-                int matchScore = [card match:@[otherCard]];
-                if (matchScore) {
-                    self.score += matchScore * MATCH_BONUS;
-                    card.matched = YES;
-                    otherCard.matched = YES;
-                } else {
-                    self.score -= MISMATCH_PENALTY;
-                    otherCard.chosen = NO;
+    if (!card.isMatched) {
+        if (card.isChosen) {
+            card.chosen = NO;
+        } else {
+            
+            for (Card *otherCard in self.cards){
+                if (otherCard.isChosen && !otherCard.isMatched){
+                    int matchScore = [card match:@[otherCard]];
+                    if (matchScore) {
+                        self.score += matchScore * MATCH_BONUS;
+                        card.matched = YES;
+                        otherCard.matched = YES;
+                    } else {
+                        self.score -= MISMATCH_PENALTY;
+                        otherCard.chosen = NO;
+                    }
+                    break;
                 }
-                break;
             }
+            self.score -= COST_TO_CHOSE;
+            card.chosen = YES;
         }
-        self.score -= COST_TO_CHOSE;
-        card.chosen = YES;
     }
 }
 @end
