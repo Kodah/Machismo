@@ -20,6 +20,8 @@
     return _cards;
 }
 
+
+
 -(instancetype)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck{
     self = [super init];
     
@@ -70,6 +72,7 @@
                     } else {
                         self.score -= MISMATCH_PENALTY;
                         otherCard.chosen = NO;
+                        card.chosen = NO;
                     }
                     break;
                 }
@@ -79,4 +82,49 @@
         }
     }
 }
+
+-(void)chooseChooseCardAtIndex:(NSUInteger)index{
+    Card *card = [self cardAtIndex:index];
+    
+    if (!card.isMatched) {
+        if (card.isChosen) {
+            card.chosen = NO;
+        } else {
+        
+            NSMutableArray *theChosenCards = [[NSMutableArray alloc]init];
+            
+            card.chosen = YES;
+            
+            for (Card *otherCard in self.cards) {
+                if (card == otherCard) continue;
+                if (otherCard.isChosen && !otherCard.isMatched) {
+                    [theChosenCards addObject:otherCard];
+                }
+            }
+            
+            if ([theChosenCards count] == 2) {
+                
+                NSLog(@"%@, %@ %@",[theChosenCards[0] contents], [theChosenCards[1] contents], card.contents);
+                
+                int matchScore = [card match:theChosenCards];
+                
+                if (matchScore) {
+                    self.score += matchScore * MATCH_BONUS;
+                    card.matched = YES;
+                    for (Card *x in theChosenCards) {
+                        x.Matched = YES;
+                    }
+                } else {
+                    card.chosen = NO;
+                    for (Card *s in theChosenCards)
+                        s.chosen = NO;
+                    self.score -= 1;
+                }
+            }
+        }
+        self.score -= COST_TO_CHOSE;
+    }
+}
+
+
 @end

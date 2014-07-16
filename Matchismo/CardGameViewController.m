@@ -35,7 +35,7 @@
     int chooseButtonIndex = [self.cardButtons indexOfObject:sender];
     
     self.modeSwitcher.selectedSegmentIndex == 0 ? [self.game chooseCardAtIndex:chooseButtonIndex]
-    : NSLog(@"fist my forehooden");
+    : [self.game chooseChooseCardAtIndex:chooseButtonIndex];
 
     [self UpdateUI];
 
